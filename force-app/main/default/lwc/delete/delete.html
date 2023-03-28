@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title="Delete">
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" padding="around-small">
+                <lightning-combobox value={selectedsobject} placeholder="Select Sobject" options={sobjectlist}
+                    onchange={handleSobjectChange}></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-radio-group name=""
+                                      label=""
+                                      options={options}
+                                      value={value}
+                                      type="radio"
+                                      onchange={handleChange}></lightning-radio-group>
+             </lightning-layout-item>
+                <template if:true={MultipleVal}>
+                    <lightning-file-upload accept={acceptedFormats} label="" onuploadfinished={uploadFileHandler}>
+                    </lightning-file-upload>
+                </template>
+               <!--  <template if:true={SingleVal}>
+                                <lightning-layout-item size="6" padding="around-small">
+                    <lightning-input label="Record ID" type="text" value={recordID} onchange={handleIdChange}></lightning-input> 
+                    <lightning-button variant="brand" label="Delete Record" title={label} onclick={SingleRecord}></lightning-button>
+                                </lightning-layout-item>
+                </template> -->
+        </lightning-layout>
+    </lightning-card>
+</template>

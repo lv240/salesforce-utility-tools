@@ -1,0 +1,45 @@
+<template>
+   
+    <!---<template if:true={isLoading}>
+         <div class="exampleHolder">
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </div>
+    </template>-->
+ 
+    <lightning-card>
+ 
+    <template for:each={result} for:item="user" for:index="index">
+ 
+     <div key={user}>
+ 
+         <p>
+             {user}
+         </p>
+ 
+     </div>
+     
+   
+     
+    </template>
+ 
+    
+    <!--- <lightning-card  title="">
+         <lightning-layout multiple-rows>
+             <lightning-layout-item size="6" padding="around-small">
+                 <lightning-combobox
+                     value={selectedsobject}
+                     placeholder="Select Sobject"
+                     options={sobjectlist}
+                     onchange={handleSobjectChange} ></lightning-combobox>
+             </lightning-layout-item>
+            </lightning-layout> -->
+ 
+           <!--- <lightning-layout multiple-rows>
+                 <lightning-layout-item size="12" padding="around-small">
+                     <pre>{jsonString}</pre>
+                 </lightning-layout-item>
+             </lightning-layout>-->
+ 
+ 
+     </lightning-card>
+ </template>

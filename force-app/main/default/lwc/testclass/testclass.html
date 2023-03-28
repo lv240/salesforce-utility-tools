@@ -1,0 +1,351 @@
+<template>
+    <lightning-card>
+           <!--  <lightning-layout-item size="12" padding="around-small">
+                <div class="slds-form-element slds-p-horizontal_medium">
+                    <input type="text" class="slds-input search-input-class" role="textbox" placeholder="search sObject"
+                        value={childinputValue} onkeyup={handleKeyPress}></input>
+                    <template if:true={showSearchedValues}>
+                        <div id="listbox-id-11" class="slds-dropdown slds-dropdown_fluid slds-p-right_medium"
+                            role="listbox">
+                            <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-5 customClass"
+                                tabindex="0" role="presentation">
+                                <template for:each={filterObjectlist} for:item="option">
+                                    <li key={option.value} role="presentation" class="slds-listbox__item"
+                                        data-label={option.label} data-value={option.value}
+                                        onclick={optionsClickHandler} title={option.label}>
+                                        <div id={option.value}
+                                            class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                            role="option">
+                                            <span class="slds-media__figure slds-listbox__option-icon"></span>
+                                            <span class="slds-truncate">
+                                                <span>{option.label}</span>
+                                            </span>
+                                        </div>
+                                    </li>
+
+                                </template>
+                            </ul>
+                        </div>
+                    </template>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                          <span>
+                            <lightning-tabset>
+                                    <template for:each={showData} for:item="Data">
+                                        <li key={Data.ClassName}>
+                                            <lightning-tab label={Data.ClassName} name={Data.ClassName}>
+                                                <div class="slds-p-left_xx-large">
+                                                    <template for:each={Data.dataValue} for:item="atts">
+                                                        <p key={atts.key}>
+                                                            ClassId           : {atts.ClassId}<br>
+                                                            ClassName         : {atts.ClassName}<br>
+                                                            TestMethodName    : {atts.TestMethodName}<br>
+                                                            NumLinesCovered   : {atts.NumLinesCovered}<br>
+                                                            NumLinesUncovered : {atts.NumLinesUncovered}<br>
+                                                            CreatedUser       : {atts.CreatedUser}<br>
+                                                            ModifiedUser      : {atts.ModifiedUser}<br>
+                                                            ModifiedUserId    : {atts.ModifiedUserId}<br>
+                                                            TotalTestCoverage : {atts.TotalTestCoverage}<br>
+                                                           
+                                                        </p>
+                                                    </template>
+                                                </div>
+                                            </lightning-tab>
+                                        </li>
+                                    </template>
+                            </lightning-tabset>
+                          </span>
+                        </div>
+                        <div class="slds-col">
+                          <span>
+                           
+                          </span>
+                        </div>
+                      </div>
+                </div>
+            </lightning-layout-item> 
+            <template if:true={emailButton}>
+                <lightning-button variant="brand" label="sendEmail" title="Open Modal" onclick={sendEmail}
+            class="slds-m-left_x-small"></lightning-button>
+        </template>-->
+        <div class="slds-m-around_x-small">
+            <lightning-tabset variant="scoped">
+                <lightning-tab label="Apex Classes">
+                    <template if:true={customListView}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-scrollable"  style="height:35rem">
+                            <div class="slds-modal__container" >
+                                <!-- modal header start -->
+                                <header class="slds-modal__header">
+                                    <button
+                                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                        title="Close" onclick={customHideModalPopup}>
+                                        <lightning-icon icon-name="utility:close" alternative-text="close"
+                                            variant="inverse" size="small"></lightning-icon>
+                                        <span class="slds-assistive-text">Close</span>
+                                    </button>
+                                    <h2 class="slds-text-heading_medium slds-hyphenate">Customize List-View
+                                    </h2>
+                                </header>
+                                <!-- modal body start -->
+                                <div class="slds-modal__content slds-p-around_medium">
+                                    <lightning-input label="ListView Name" name="Name"   value={listviewName} onchange={handleListView}></lightning-input>
+                                    <div class="slds-grid slds-wrap">
+                                        <template for:each={filterList} for:item="eachFilter" for:index="index">
+                                            <lightning-layout  multiple-rows key={eachFilter.Id} >
+                                                <lightning-layout-item size="3" padding="around-small">
+                                                    <lightning-combobox label="" value={eachFilter.filterField}
+                                                        placeholder="Select Field" options={opty} data-rowindex={index}
+                                                        onchange={filterFieldChanged}></lightning-combobox>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="3" padding="around-small">
+                                                    <lightning-combobox label="" value={eachFilter.operation}
+                                                        options={filterOptions} data-rowindex={index}
+                                                        onchange={filterOperationChanged}></lightning-combobox>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="3" padding="around-small">
+                                                    <lightning-input value={eachFilter.value} data-rowindex={index}
+                                                        onchange={filterValueChanged}>
+                                                    </lightning-input>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="3" padding="around-small">
+                                                    <lightning-combobox label="" value={eachFilter.logic}
+                                                        options={logicOptions} data-rowindex={index}
+                                                        onchange={filterlogicChanged}></lightning-combobox>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="3" padding="around-small">
+                                                    <template if:true={eachFilter.showadd}>
+                                                        <br />
+                                                        <div class="slds-m-right_none">
+                                                        <lightning-button-icon  onclick={addFilterRow}
+                                                            icon-name="utility:add" alternative-text="add"
+                                                            title="add"></lightning-button-icon>
+                                                        </div>
+                                                    </template>
+                                                    <template if:false={eachFilter.showadd}>
+                                                        <br />
+                                                        <!-- <lightning-button-icon data-rowindex={index}
+                                                            onclick={removeFilterRow} icon-name="utility:dash"
+                                                            alternative-text="dash"
+                                                            title="dash"></lightning-button-icon> -->
+                                                    </template>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                        </template>
+                                    </div>
+                                     <lightning-textarea name="input1" value={finalSoqlString}
+                                        label="Enter or Modify Query Below:"
+                                        onchange={soqlChanged}></lightning-textarea>
+                                    <!-- modal footer start-->
+                                    <footer class="slds-modal__footer">
+                                        <button class="slds-button slds-button--destructive"
+                                            onclick={customCustomList}>Cancel</button>
+                                        <button class="slds-button slds-button_brand"
+                                            onclick={saveCustomList}>Save</button>
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open">
+                        </div>
+                    </template>
+
+                    <template if:true={customFormModal}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <!-- modal header start -->
+                                <header class="slds-modal__header">
+                                    <button
+                                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                        title="Close" onclick={customHideModalPopup}>
+                                        <lightning-icon icon-name="utility:close" alternative-text="close"
+                                            variant="inverse" size="small"></lightning-icon>
+                                        <span class="slds-assistive-text">Close</span>
+                                    </button>
+                                    <h2 class="slds-text-heading_medium slds-hyphenate">Customize the Datatable
+                                    </h2>
+                                </header>
+                                <!-- modal body start -->
+                                <div class="slds-modal__content slds-p-around_medium">
+
+                                    <div class="slds-grid slds-wrap">
+                                        <lightning-dual-listbox name="languages" label="Select Fields"
+                                            source-label="Available Fields" selected-label="Selected Fields"
+                                            field-level-help="Select your preferred Fields" options={options}
+                                            value={values} onchange={handleFieldsChange}></lightning-dual-listbox>
+                                    </div>
+                                    <!-- <lightning-textarea name="input1" value={finalSoqlString} label="Enter or Modify Query Below:"
+                onchange={soqlChanged}></lightning-textarea> -->
+                                    <!-- modal footer start-->
+                                    <footer class="slds-modal__footer">
+                                        <button class="slds-button slds-button--destructive"
+                                            onclick={customHideModalPopup}>Cancel</button>
+                                        <button class="slds-button slds-button_brand" onclick={saveQuery}>Save</button>
+                                    </footer>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open">
+                        </div>
+                    </template>
+                    <div class="slds-p-around_medium lgc-bg list_view_and_table_container">
+                        <lightning-tile label="List of Items" title="List of Items" type="media" href="#" class="list_view_container">
+                            <lightning-icon slot="media" icon-name="standard:orders" size="medium" class="icon_custom_class">
+                            </lightning-icon>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container slds-size_small">
+                                        <div class={dropdownTriggerClass} aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                                                role="none" onclick={handleClickExtend}>
+                                                <span class="current_filter">{selectedListView}
+                                                    <lightning-icon  variant="brand"
+                                                        class="slds-button__icon slds-icon-utility-down slds-icon_container forceIcon"
+                                                        data-data-rendering-service-uid="232" data-aura-rendered-by="371:0"
+                                                        data-aura-class="forceIcon" icon-name="utility:down" size="x-small">
+                                                    </lightning-icon>
+                                                </span>
+                                            </div>
+                                            <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid"
+                                                role="listbox">
+                                                <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                    <template for:each={filterOptionsList} for:item="option">
+                                                        <li role="presentation" class="slds-listbox__item" key={option.value}>
+                                                            <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                                                data-filter={option.value} onclick={handleChangeListView}>
+                                                                <span class="slds-media__figure slds-listbox__option-icon"
+                                                                    data-filter={option.value}></span>
+                                                                <span class="slds-media__body" data-filter={option.value}>
+                                                                    <span class="slds-truncate" title="Option A"
+                                                                        data-filter={option.value}>{option.label}</span>
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-tile>
+                        <div class="slds-float_right">
+                        <lightning-button-icon icon-name="utility:list" variant="brand" alternative-text="list" title="List View" onclick={checkboxChecked} class="slds-m-left_x-small"></lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:filterList" variant="brand" alternative-text="filterList" title="Filter Datatable" onclick={customShowModalPopup} class="slds-m-left_x-small"></lightning-button-icon>
+                        </div> </div>
+                    <!-- <div class="slds-p-around_medium lgc-bg-inverse">
+                        <lightning-button-icon icon-name="utility:list" variant="border-inverse" alternative-text="list" title="List View" onclick={checkboxChecked} class="slds-m-left_x-small"></lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:filterList" variant="border-inverse" alternative-text="filterList" title="Filter Datatable" onclick={customShowModalPopup} class="slds-m-left_x-small"></lightning-button-icon>
+                    </div> -->
+                    <div class="slds-m-around_x-small">
+                        <div class="slds-clearfix">
+                            <div class="slds-float_right">
+                                <template for:each={alphabet} for:item="letter">
+                                    &nbsp;<a onclick={handleFilterChange} key={letter} data-filter={letter}>
+                                        {letter}
+                                    </a>
+                                    &nbsp;|
+                                </template>
+                                <a onclick={handleFilterChange} data-filter="">
+                                    ALL
+                                </a>
+                            </div>
+                        </div>
+                       <!--  <div class="slds-card slds-has-bottom-magnet">
+                            <lightning-layout >
+                            <lightning-layout-item size="2" padding="around-small">
+                                
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" padding="around-small">
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" padding="around-small">
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6" padding="around-small">
+                                <template for:each={alphabet} for:item="letter">
+                                    &nbsp;<a onclick={handleFilterChange} key={letter} data-filter={letter}>
+                                        {letter}
+                                    </a>
+                                    &nbsp;|
+                                </template>
+                                <a onclick={handleFilterChange} data-filter="">
+                                    ALL
+                                </a>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        </div> -->
+                        
+                            <template if:true={showTable}>
+                                <lightning-datatable key-field="ClassId" data={recordsToDisplay} columns={Columns}
+                                    hide-checkbox-column>
+                                </lightning-datatable>
+                            </template>
+                            <table
+                                class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <template for:each={tableColumns} for:item="eachColumn" for:index="index">
+                                            <th class="" scope="col" key={eachColumn}>{eachColumn.label} </th>
+                                        </template>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={tableData} for:item="eachRow" for:index="index1">
+                                        <tr key={eachRow} class="slds-hint-parent">
+
+                                            <template for:each={eachRow} for:item="eachCell">
+                                                <td key={eachCell.cellValue}>{eachCell.cellValue}</td>
+
+                                            </template>
+
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        
+                        <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-spread"
+                            style="padding-top: 0.5em;">
+                            <div class="slds-col">
+                                <div class="slds-list_inline slds-p-bottom_xx-small">
+                                    <label class="slds-text-color_weak slds-p-horizontal_x-small"
+                                        for="recordsPerPage">Page
+                                        Size:</label>
+                                    <div class="slds-select_container">
+                                        <select class="slds-select" id="recordsPerPage" onchange={handleRecordsPerPage}>
+                                            <template for:each={pageSizeOptions} for:item="option">
+                                                <option key={option} value={option}>{option}</option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-align_absolute-center" style="height:5rem">
+                            <lightning-button disabled={DisableFirst} icon-name="utility:jump_to_left" label="First"
+                                class="slds-p-horizontal_x-small" alternative-text="first page"
+                                onclick={firstPage}></lightning-button>
+
+                            <lightning-button disabled={DisableFirst} icon-name="utility:chevronleft" label="Previous"
+                                alternative-text="Previous" onclick={previousPage}></lightning-button>
+                            &nbsp;
+                            <span class="slds-badge">Showing {pageNumber} &nbsp;of&nbsp; {totalPages}
+                                &nbsp;&nbsp;Page(s)</span>
+                            &nbsp;
+                            <lightning-button disabled={DisableLast} icon-name="utility:chevronright" label="Next"
+                                alternative-text="Next" onclick={nextPage} class="slds-p-horizontal_x-small"
+                                icon-position="right"></lightning-button>
+
+                            <lightning-button disabled={DisableLast} icon-name="utility:jump_to_right" label="Last"
+                                alternative-text="last page" onclick={lastPage}
+                                icon-position="right"></lightning-button>
+                        </div>
+                    </div>
+                </lightning-tab>
+                <lightning-tab label="Test Classes">
+                    <c-testclass-grid></c-testclass-grid>
+                </lightning-tab>
+            </lightning-tabset>
+        </div>
+        
+    </lightning-card>
+</template>

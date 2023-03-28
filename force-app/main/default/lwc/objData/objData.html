@@ -1,0 +1,212 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="exampleHolder">
+           <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+       </div>
+   </template>
+   <lightning-card title="">
+    <div class="slds-form-element slds-p-horizontal_medium">
+        <input type="text" class="slds-input search-input-class" role="textbox" placeholder="search sObject"
+            value={childinputValue} onkeyup={handleKeyPress}></input>
+        <template if:true={showSearchedValues}>
+
+            <div id="listbox-id-11" class="slds-dropdown slds-dropdown_fluid slds-p-right_medium" role="listbox">
+                <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-5 customClass" tabindex="0"
+                    role="presentation">
+                    <template for:each={filterObjectlist} for:item="option">
+                        <li key={option.value} role="presentation" class="slds-listbox__item"
+                            data-label={option.label} data-value={option.value} onclick={optionsClickHandler}
+                            title={option.label}>
+                            <div id={option.value}
+                                class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                role="option">
+                                <span class="slds-media__figure slds-listbox__option-icon"></span>
+                                <span class="slds-truncate">
+                                    <span>{option.label}</span>
+                                </span>
+                            </div>
+                        </li>
+                        <!--/ li to display each option in the list -->
+                    </template>
+                </ul>
+            </div>
+        </template>
+    <template if:true={jsonString.fields}>
+        
+            <lightning-accordion allow-multiple-sections-open
+                                 active-section-name={activeSections}>
+               <!-- <lightning-accordion-section name="actionOverrides" label="actionOverrides">
+                    <template for:each={metattriaData} for:item="recData">
+                        <tr key={recData.key}>
+                            <th scope="col">
+                                <div title={recData.key}>
+                                    <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                        alternative-text="breadcrumbs!" title="breadcrumbs">
+                                    </lightning-icon>
+                                    &nbsp;&nbsp; {recData.key}
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div title={recData.value}>: {recData.value}</div>
+                            </th>
+                        </tr>
+                    </template>
+                </lightning-accordion-section>-->
+                
+                <template if:false={hasattributes}>
+                    <lightning-accordion-section name="attributes" label="attributes">
+                        <div class="slds-p-left_large">
+                            <template for:each={childData} for:item="map">
+                                <tr key={map.key}>
+                                    <th scope="col">
+                                        <div title={map.key}>
+                                            <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                                alternative-text="breadcrumbs!" title="breadcrumbs">
+                                            </lightning-icon>
+                                            &nbsp;&nbsp; {map.key}&nbsp;&nbsp;
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div title={map.value}>: {map.value}</div>
+                                    </th>
+                                </tr>
+                            </template>
+                        </div>
+                    </lightning-accordion-section>
+                </template>
+                <lightning-accordion-section name="childRelationships" label="childRelationships">
+                    <div class="slds-p-left_large">
+                           <template for:each={jsonString.childRelationships} for:item="child">
+                                <li key={child.childSObject}>
+                                   <lightning-accordion-section label={child.childSObject} name={child.childSObject}>
+                                        <div class="slds-p-left_xx-large">
+                                            <!--<template for:each={childDataMeta} for:item="recData">
+                                                <tr key={recData.key}>
+                                                    <th scope="col">
+                                                        <div title={recData.key}>
+                                                            <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                                                alternative-text="breadcrumbs!" title="breadcrumbs">
+                                                            </lightning-icon>
+                                                            &nbsp;&nbsp; {recData.key}
+                                                        </div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div title={recData.value}>: {recData.value}</div>
+                                                    </th>
+                                                </tr>
+                                            </template>-->
+                                             cascadeDelete       : {child.cascadeDelete}<br>
+                                            childSObject        : {child.childSObject}<br>
+                                            deprecatedAndHidden : {child.deprecatedAndHidden}<br>
+                                            field               : {child.field}<br>
+                                            junctionIdListNames : {child.junctionIdListNames}<br>
+                                            junctionReferenceTo : {child.junctionReferenceTo}<br>
+                                            relationshipName    : {child.relationshipName}<br>
+                                            restrictedDelete    : {child.restrictedDelete} 
+                                        </div>
+                                    </lightning-accordion-section>  </li>
+                        </template>  
+                    </div>
+                </lightning-accordion-section>
+                <lightning-accordion-section name="fields" label="fields">
+                    <div class="slds-p-left_large">
+                           <template for:each={jsonString.fields} for:item="fieldData">
+                                <li key={fieldData.label}>
+                                    <lightning-accordion-section label={fieldData.label} name={fieldData.label}>
+                                        <div class="slds-p-left_xx-large">
+                                            <p> aggregatable : {fieldData.aggregatable} <br>
+                                                aiPredictionField  : {fieldData.aiPredictionField}
+                                                autoNumber  : {fieldData.autoNumber}<br>
+                                                byteLength  : {fieldData.byteLength}<br>
+                                                calculated  : {fieldData.calculated}<br>
+                                                calculatedFormula  : {fieldData.calculatedFormula}<br>
+                                                cascadeDelete  : {fieldData.cascadeDelete}<br>
+                                                caseSensitive  : {fieldData.caseSensitive}<br>
+                                                compoundFieldName  : {fieldData.compoundFieldName}<br>
+                                                controllerName  : {fieldData.controllerName}<br>
+                                                createable  : {fieldData.createable}<br>
+                                                custom  : {fieldData.custom}<br>
+                                                defaultValue  : {fieldData.defaultValue}<br>
+                                                defaultValueFormula  : {fieldData.defaultValueFormula}<br>
+                                                defaultedOnCreate  : {fieldData.defaultedOnCreate}<br>
+                                                dependentPicklist  : {fieldData.dependentPicklist}<br>
+                                                deprecatedAndHidden  : {fieldData.deprecatedAndHidden}<br>
+                                                digits  : {fieldData.digits}<br>
+                                                displayLocationInDecimal  : {fieldData.displayLocationInDecimal}<br>
+                                                encrypted  : {fieldData.encrypted}<br>
+                                                externalId  : {fieldData.externalId}<br>
+                                                extraTypeInfo  : {fieldData.extraTypeInfo}<br>
+                                                filterable  : {fieldData.filterable}<br>
+                                                filteredLookupInfo  : {fieldData.filteredLookupInfo}<br>
+                                                formulaTreatNullNumberAsZero  : {fieldData.formulaTreatNullNumberAsZero}<br>
+                                                groupable  : {fieldData.groupable}<br>
+                                                highScaleNumber  : {fieldData.highScaleNumber}<br>
+                                                htmlFormatted  : {fieldData.htmlFormatted}<br>
+                                                idLookup  : {fieldData.idLookup}<br>
+                                                inlineHelpText  : {fieldData.inlineHelpText}<br>
+                                                label  : {fieldData.label}<br>
+                                                length  : {fieldData.length}<br>
+                                                mask  : {fieldData.mask}<br>
+                                                maskType  : {fieldData.maskType}<br>
+                                                name  : {fieldData.name}<br>
+                                                nameField  : {fieldData.nameField}<br>
+                                                namePointing  : {fieldData.namePointing}<br>
+                                                nillable  : {fieldData.nillable}<br>
+                                                permissionable  : {fieldData.permissionable}<br>
+                                                picklistValues  : {fieldData.picklistValues}<br>
+                                                polymorphicForeignKey  : {fieldData.polymorphicForeignKey}<br>
+                                                precision  : {fieldData.precision}<br>
+                                                queryByDistance  : {fieldData.queryByDistance}<br>
+                                                referenceTargetField  : {fieldData.referenceTargetField}<br>
+                                                referenceTo  : {fieldData.referenceTo}<br>
+                                                relationshipName  : {fieldData.relationshipName}<br>
+                                                relationshipOrder  : {fieldData.relationshipOrder}<br>
+                                                restrictedDelete  : {fieldData.restrictedDelete}<br>
+                                                restrictedPicklist  : {fieldData.restrictedPicklist}<br>
+                                                scale  : {fieldData.scale}<br>
+                                                searchPrefilterable  : {fieldData.searchPrefilterable}<br>
+                                                soapType  : {fieldData.soapType}<br>
+                                                sortable  : {fieldData.sortable}<br>
+                                                type  : {fieldData.type}<br>
+                                                unique  : {fieldData.unique}<br>
+                                                updateable  : {fieldData.updateable}<br>
+                                                writeRequiresMasterRead  : {fieldData.writeRequiresMasterRead}<br>
+                                            </p>
+                                        </div>
+                                    </lightning-accordion-section> </li>
+                        </template>  
+                    </div>
+                </lightning-accordion-section>
+                <lightning-accordion-section name="supportedScopes" label="supportedScopes">
+                    <div class="slds-p-left_large">
+                       <!--  <div>{abc.label}</div>
+                        <div>{childData.label}</div> -->
+
+                           <template for:each={jsonString.supportedScopes} for:item="recData">
+                                <li key={recData.name}>
+                                    <lightning-accordion-section label={recData.name} name={recData.name}>
+                                        <div class="slds-p-left_xx-large">
+                                            <p> label : {recData.label} <br>
+                                                name  : {recData.name}</p>
+
+                                        <!-- <template for:each={recData.label} for:item="att">
+                                           
+                                            <p key={att.label}> {att.label} : {att.name}</p>
+                                        </template> -->
+                                        </div>
+                                    </lightning-accordion-section> </li>
+                        </template>  
+                    </div>
+                </lightning-accordion-section>
+            </lightning-accordion>
+        
+        </template>
+          <!--   <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" padding="around-small">
+                    <pre>{metattriaData}</pre>
+                </lightning-layout-item>
+            </lightning-layout> -->  
+</div>
+
+    </lightning-card>
+</template>

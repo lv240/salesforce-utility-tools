@@ -1,0 +1,229 @@
+<template>
+    <template if:true={showSpinner}>
+    <div class="exampleHolder">
+        <lightning-spinner  icon-name="utility:spinner" alternative-text="Loading" size="large"></lightning-spinner>
+    </div>
+    </template>
+    <lightning-card>
+        
+        <div class="slds-m-around_medium">
+           <h1 style="font-weight: bold">Choose an HTTP method to perform on the REST API service URI below:</h1><br>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                <span>
+                    <div>
+                        <template for:each={options} for:item="item">
+                            <fieldset key={item.value} style="display: block; float: left;">
+                                <div class="slds-form-element__control">
+                                    <span class="slds-radio">
+                                        <input name="radiogroup" id={item.value} type="radio" value={item.value} onchange={handleSelected}/>
+                                        <label class="slds-radio__label" for={item.value}>
+                                            <span class="slds-radio_faux"></span>
+                                            <span class="slds-form-element__label">{item.label}</span>
+                                        </label>
+                                    </span> 
+                                </div>
+                            </fieldset>
+                        </template>
+                        <lightning-button  label="Reset" variant="neutral" onclick={handleReset} class="slds-m-left_x-small"></lightning-button>
+                        </div>
+                </span>
+
+                </div>
+                <span>
+                    
+                </span>
+                </div>
+                <div >
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-col slds-size_2-of-3">
+                            <lightning-input type="text" value={endPointValue} mode="edit" style="font-weight: bold; "
+                                onchange={inputChange}></lightning-input>
+                        </div>
+                        <div class="slds-col" style="margin-top: 19px;">
+                            <lightning-button label="Execute" variant="neutral" onclick={handleExecute}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <template if:true={textBody} >
+            <div class="slds-m-around_small">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-col slds-size_2-of-3">
+                 <lightning-textarea label="Request Body" onchange={textareachangehandler} value={textareachangevalue} placeholder="Enter in JSON format" required="true" style="width: 950px;"></lightning-textarea>
+          </div></div></div>
+            
+        </template>
+    
+        <div class="slds-m-around_small">
+            <template if:true={executeData} >
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                    <template for:each={versions} for:item="version">
+                        <div key={version.name}>
+                        
+                            <lightning-accordion-section class='fas fa-folder-open' style="font-weight: bold " label={version.name} name={version.name}>
+                                <template for:each={version.attributes} for:item="arrList">
+                                    <div key={arrList.key}>
+                                            {arrList.key} :{arrList.value}    
+                                    </div>
+                                </template> 
+                            </lightning-accordion-section>
+                        </div>
+                    </template>
+                </lightning-accordion>
+            </template>
+        </div>
+        <div class="slds-m-around_small">
+        <template if:true={execute}>
+            <template for:each={stringValueList} for:item="List">
+                <tr key={List.key}>
+                    <th scope="col">
+                        <div title={List.key}>
+                            <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                alternative-text="breadcrumbs!" title="breadcrumbs">
+                            </lightning-icon>
+                            &nbsp;&nbsp; {List.key}&nbsp;&nbsp;
+                        </div>
+                    </th>
+                    <th scope="col">
+                        <div title={List.value}>: &nbsp;&nbsp; {List.value}</div>
+                    </th>
+                </tr>
+            </template>
+        </template>
+        </div>
+        <div class="slds-m-around_small">
+            <template if:true={showError} >
+                <div>
+                    <h1 style="font-weight: bold;">Raw Response</h1>
+                </div>
+                
+                <template for:each={errorData} for:item="data" >
+                    
+                  <p key={data.message} style="color:red;"> Message: {data.message} </p>
+                  <p key={data.errorCode} style="color:red;"> Error Code: {data.errorCode} </p>
+                </template>
+            </template>
+           </div>
+        <div class="slds-m-around_small">
+            <template if:true={showError1} >
+                <div>
+                    <h1 style="font-weight: bold;">Raw Response</h1>
+                </div>
+                
+                <template for:each={errorData1} for:item="data" >
+                    
+                  <p key={data.message} style="color:red;"> Message: {data.message} </p>
+                  <p key={data.errorCode} style="color:red;"> Error Code: {data.errorCode} </p>
+                </template>
+            
+            </template>
+        </div>
+            <div class="slds-m-around_small">
+            <template if:true={showResult}>
+                <div>
+                    <h1 style="font-weight: bold; color:red;">Raw Response</h1>
+                </div>
+                <p>HTTP/1.1 204 No Content</p>
+                <p>Record updated Successfully!!</p>
+            </template>
+            </div>
+            <div class="slds-m-around_small">
+            <template if:true={resulttemp1}>
+              
+                <div>
+                    <h1 style="font-weight: bold;">Raw Response</h1>
+                </div>
+                <template for:each={getresult1} for:item="res">
+                  <p key={res.key} style="color:red;">{res.key}: {res.value}</p>
+                </template>
+            
+        
+            </template>
+        </div>
+        <div class="slds-m-around_small">
+            <template if:true={errortemp1}>
+                
+                <div>
+                    <h1 style="font-weight: bold;">Raw Response</h1>
+                </div>
+                
+                    
+                <template for:each={getresult} for:item="res">
+                  <p key={res.key} style="color:red;">{res.key}: {res.value}</p>
+                </template>
+            
+        
+            </template>
+        </div>
+        <div class="slds-m-around_small"> 
+          <template if:true={executeBoth}>
+           <template for:each={stringValueList} for:item="List">
+                <tr key={List.key}>
+                    <th scope="col">
+                        <div title={List.key}>
+                            <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                alternative-text="breadcrumbs!" title="breadcrumbs">
+                            </lightning-icon>
+                            &nbsp;&nbsp; {List.key}&nbsp;&nbsp;
+                        </div>
+                    </th>
+                    <th scope="col">
+                        <div title={List.value}>:{List.value}</div>
+                    </th>
+                </tr>
+            </template>
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                    <lightning-accordion-section style="font-weight: bold" name={iamLabelArray} label={iamLabelArray}>
+                    <template for:each={finalarrayList} for:item="arr">
+                        <lightning-accordion-section style="font-weight: bold" key={arr.Name} name={arr.Name} label={arr.Name}>
+                            <template for:each={arr.attributes} for:item="arrList">
+                                <div key={arrList.key}>
+                                        {arrList.key} :{arrList.value}    
+                                </div>
+                            </template>
+                        </lightning-accordion-section>
+                    </template>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+            </template>
+        </div>
+           <div class="slds-m-around_small">
+            <template if:true={executeObject}>
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                    <lightning-accordion-section style="font-weight: bold" name={iamLabelObject} label={iamLabelObject}>
+                    <template for:each={objectValueList} for:item="arr">
+                                <div key={arr.Key}>
+                                        {arr.Key} :{arr.Value}    
+                                </div>
+                    </template>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+                <!--<lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                    <lightning-accordion-section name={iamLabelArray} label={iamLabelArray}>
+                    <template for:each={finalarrayList} for:item="arr">
+                        <lightning-accordion-section key={arr.name} name={arr.name} label={arr.name}>
+                            <template for:each={arr.attributes} for:item="arrList">
+                                <div key={arrList.key}>
+                                        {arrList.key} :{arrList.value}    
+                                </div>
+                            </template>
+                        </lightning-accordion-section>
+                    </template>
+                    </lightning-accordion-section>
+                </lightning-accordion>-->
+              </template>
+            </div>
+            <div class="slds-m-around_small">
+              <template if:true={showGetError}>
+                 <p style="color:red;">{getError}</p>
+              </template>
+            </div>
+
+        
+    </lightning-card>
+
+    
+
+
+</template>

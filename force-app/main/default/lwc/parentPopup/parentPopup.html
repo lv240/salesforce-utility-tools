@@ -1,0 +1,6 @@
+<template>
+    <lightning-button label="save" onclick={popUp}></lightning-button>
+    <template if:true={showPop}>
+        <c-child-popup></c-child-popup>
+    </template>
+</template>

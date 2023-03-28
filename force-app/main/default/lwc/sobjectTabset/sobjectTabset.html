@@ -1,0 +1,162 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="exampleHolder">
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </div>
+    </template>
+    <lightning-card title="">
+        <div class="slds-form-element slds-p-horizontal_medium">
+            <input type="text" class="slds-input search-input-class" role="textbox" placeholder="search sObject"
+                value={childinputValue} onkeyup={handleKeyPress}></input>
+            <template if:true={showSearchedValues}>
+
+                <div id="listbox-id-11" class="slds-dropdown slds-dropdown_fluid slds-p-right_medium" role="listbox">
+                    <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-5 customClass" tabindex="0"
+                        role="presentation">
+                        <template for:each={filterObjectlist} for:item="option">
+                            <li key={option.value} role="presentation" class="slds-listbox__item"
+                                data-label={option.label} data-value={option.value} onclick={optionsClickHandler}
+                                title={option.label}>
+                                <div id={option.value}
+                                    class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                    role="option">
+                                    <span class="slds-media__figure slds-listbox__option-icon"></span>
+                                    <span class="slds-truncate">
+                                        <span>{option.label}</span>
+                                    </span>
+                                </div>
+                            </li>
+
+                        </template>
+                    </ul>
+                </div>
+            </template>
+            <template if:true={wrapper}>
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                    <lightning-tabset variant="scoped">
+                        <template if:false={hasattributes}>
+                            <lightning-tab label="attributes" icon-name="utility:jump_to_bottom">
+                                <div class="slds-p-left_large">
+                                    <template for:each={attributes} for:item="map">
+                                        <tr key={map.key}>
+                                            <th scope="col">
+                                                <div title={map.key}>
+                                                    <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                                        alternative-text="breadcrumbs!" title="breadcrumbs">
+                                                    </lightning-icon>
+                                                    &nbsp;&nbsp; {map.key}&nbsp;&nbsp;
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div title={map.value}>: {map.value}</div>
+                                            </th>
+                                        </tr>
+                                    </template>
+                                </div>
+                            </lightning-tab>
+                        </template>
+                        <lightning-tab label={ChildValue} icon-name="utility:jump_to_bottom">
+                            <template if:false={hadchild}>
+                                <lightning-tabset variant="vertical">
+                                    <div class="slds-p-left_large">
+                                        <template for:each={childRelationships} for:item="Data">
+                                            <li key={Data.name}>
+                                                <lightning-tab label={Data.name} name={Data.name}
+                                                    icon-name="utility:jump_to_right">
+                                                    <div class="slds-p-left_xx-large">
+                                                        <template for:each={Data.cattribute} for:item="atts">
+                                                            <p key={atts.key}>
+                                                                <lightning-icon icon-name="utility:breadcrumbs"
+                                                                    size="xx-small" alternative-text="breadcrumbs!"
+                                                                    title="breadcrumbs">
+                                                                </lightning-icon>{atts.key} : {atts.value}
+                                                            </p>
+                                                        </template>
+                                                    </div>
+                                                </lightning-tab>
+                                            </li>
+                                        </template>
+                                    </div>
+                                </lightning-tabset>
+
+                            </template> </lightning-tab>
+                        <lightning-tab label={FieldValue} icon-name="utility:jump_to_bottom">
+                            <template if:false={hadfields}>
+                                <lightning-tabset variant="vertical">
+                                    <div class="slds-p-left_large">
+                                        <template for:each={fields} for:item="fieldData">
+                                            <li key={fieldData.name}>
+                                                <lightning-tab label={fieldData.name} name={fieldData.name}
+                                                    icon-name="utility:jump_to_right">
+                                                    <div class="slds-p-left_xx-large">
+                                                        <template for:each={fieldData.fieldattribute} for:item="att">
+                                                            <p key={att.key}>
+                                                                <lightning-icon icon-name="utility:breadcrumbs"
+                                                                    size="xx-small" alternative-text="breadcrumbs!"
+                                                                    title="breadcrumbs">
+                                                                </lightning-icon>{att.key} : {att.value}
+                                                            </p>
+                                                        </template>
+                                                    </div>
+                                                </lightning-tab>
+                                            </li>
+                                        </template>
+                                    </div>
+                                </lightning-tabset>
+                            </template> </lightning-tab>
+                        <lightning-tab label={RecordValue} icon-name="utility:jump_to_bottom">
+                            <template if:false={hadrecord}>
+                                <lightning-tabset variant="vertical">
+                                    <div class="slds-p-left_large">
+                                        <template for:each={recordTypeInfos} for:item="fieldDa">
+                                            <li key={fieldDa.name}>
+                                                <lightning-tab label={fieldDa.name} name={fieldDa.name}
+                                                    icon-name="utility:jump_to_right">
+                                                    <div class="slds-p-left_xx-large">
+                                                        <template for:each={fieldDa.recordattribute} for:item="attp">
+                                                            <p key={attp.key}>
+                                                                <lightning-icon icon-name="utility:breadcrumbs"
+                                                                    size="xx-small" alternative-text="breadcrumbs!"
+                                                                    title="breadcrumbs">
+                                                                </lightning-icon>{attp.key} : {attp.value}
+                                                            </p>
+                                                        </template>
+                                                    </div>
+                                                </lightning-tab>
+                                            </li>
+                                        </template>
+                                    </div>
+                                </lightning-tabset>
+                            </template> </lightning-tab>
+                        <lightning-tab label={scopeValue} icon-name="utility:jump_to_bottom">
+                            <template if:false={hadsupport}>
+                                <lightning-tabset variant="vertical">
+                                    <div class="slds-p-left_large">
+                                        <template for:each={supportedScopes} for:item="field">
+                                            <li key={field.name}>
+                                                <lightning-tab label={field.name} name={field.name}
+                                                    icon-name="utility:jump_to_right">
+                                                    <div class="slds-p-left_xx-large">
+                                                        <template for:each={field.fieldattribute} for:item="attm">
+                                                            <p key={attm.key}>
+                                                                <lightning-icon icon-name="utility:breadcrumbs"
+                                                                    size="xx-small" alternative-text="breadcrumbs!"
+                                                                    title="breadcrumbs">
+                                                                </lightning-icon>{attm.key} : {attm.value}
+                                                            </p>
+                                                        </template>
+                                                    </div>
+                                                </lightning-tab>
+                                            </li>
+                                        </template>
+                                    </div>
+                                </lightning-tabset>
+                            </template> </lightning-tab>
+                    </lightning-tabset>
+                </lightning-accordion>
+
+            </template>
+        </div>
+
+    </lightning-card>
+</template>

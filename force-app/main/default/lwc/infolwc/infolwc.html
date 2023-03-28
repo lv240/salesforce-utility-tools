@@ -1,0 +1,44 @@
+<template>
+    <lightning-card>
+        <template for:each={userInfo} for:item="map" for:index="index">
+ 
+            
+            <tr key={map.key}>
+                <th scope="col">
+                    <div title={map.key}>
+                        <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                            alternative-text="breadcrumbs!" title="breadcrumbs">
+                        </lightning-icon>
+                        &nbsp;&nbsp; {map.key}&nbsp;&nbsp;
+                    </div>
+                </th>
+                <th scope="col">
+                    <div title={map.value}>: {map.value}</div>
+                </th>
+            </tr>
+            
+          
+            
+           </template>
+          <!--  <template for:each={userData} for:item="mapp" for:index="index">
+ 
+            
+            <tr key={mapp.key}>
+                <th scope="col">
+                    <div title={mapp.key}>
+                        <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                            alternative-text="breadcrumbs!" title="breadcrumbs">
+                        </lightning-icon>
+                        &nbsp;&nbsp; {mapp.key}&nbsp;&nbsp;
+                    </div>
+                </th>
+                <th scope="col">
+                    <div title={mapp.value}>: {mapp.value}</div>
+                </th>
+            </tr>
+            
+          
+            
+           </template> -->
+    </lightning-card>
+</template>

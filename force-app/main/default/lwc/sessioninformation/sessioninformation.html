@@ -1,0 +1,51 @@
+<template>
+
+    <lightning-card  title="">
+        <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                <lightning-accordion-section name="Userdata" label="Userdata">
+                    <div class="slds-p-left_large">
+                        <template for:each={Userdata} for:item="map">
+                            <tr key={map.key}>
+                                <th scope="col">
+                                    <div title={map.key}>
+                                        <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                            alternative-text="breadcrumbs!" title="breadcrumbs">
+                                        </lightning-icon>
+                                        &nbsp;&nbsp; {map.key}&nbsp;&nbsp;
+                                    </div>
+                                </th>
+                                <th scope="col">
+                                    <div title={map.value}>: {map.value}</div>
+                                </th>
+                            </tr>
+                        </template>
+                    </div>
+                </lightning-accordion-section>
+                <lightning-accordion-section name="Urls" label="Urls">
+                    <div class="slds-p-left_large">
+                           <template for:each={urls} for:item="fieldData">
+                                <!-- <li key={fieldData}>
+                                    <p>{fieldData.name} : {fieldData.fieldattribute}</p>
+                                    </li> -->
+                                    <tr key={fieldData.key}>
+                                        <th scope="col">
+                                            <div title={fieldData.key}>
+                                                <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                                    alternative-text="breadcrumbs!" title="breadcrumbs">
+                                                </lightning-icon>
+                                                &nbsp;&nbsp; {fieldData.key}&nbsp;&nbsp;
+                                            </div>
+                                        </th>
+                                        <th scope="col">
+                                            <div title={fieldData.value}>: {fieldData.value}</div>
+                                        </th>
+                                    </tr>
+                        </template>  
+                    </div>
+                </lightning-accordion-section>
+                
+        </lightning-accordion>
+      
+    </lightning-card>
+
+</template>

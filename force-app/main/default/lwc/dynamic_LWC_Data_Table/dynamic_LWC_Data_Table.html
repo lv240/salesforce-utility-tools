@@ -1,0 +1,18 @@
+<template>
+    <lightning-card>
+        <div class="slds-p-horizontal_small"></div>
+        
+        <lightning-layout multiple-rows="true" vertical-align="end">
+            <lightning-layout-item size="12" padding="around-small">
+                <div if:true={DataTableResponseWrappper}>
+                    <div class="slds-text-heading_small">{DataTableResponseWrappper.TableTitle}</div>
+                    <lightning-datatable data={finalSObjectDataList} 
+                                        columns={DataTableResponseWrappper.lstDataTableColumns} 
+                                        key-field="Id"
+                                        hide-checkbox-column="true"
+                                        ></lightning-datatable>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

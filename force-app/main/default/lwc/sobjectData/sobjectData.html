@@ -1,0 +1,138 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="exampleHolder">
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </div>
+    </template>
+
+    <lightning-card title="">
+        <div class="slds-form-element slds-p-horizontal_medium">
+            <input type="text" class="slds-input search-input-class" role="textbox" placeholder="search sObject"
+                value={childinputValue} onkeyup={handleKeyPress}></input>
+            <template if:true={showSearchedValues}>
+
+                <div id="listbox-id-11" class="slds-dropdown slds-dropdown_fluid slds-p-right_medium" role="listbox">
+                    <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-5 customClass" tabindex="0"
+                        role="presentation">
+                        <template for:each={filterObjectlist} for:item="option">
+                            <li key={option.value} role="presentation" class="slds-listbox__item"
+                                data-label={option.label} data-value={option.value} onclick={optionsClickHandler}
+                                title={option.label}>
+                                <div id={option.value}
+                                    class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                    role="option">
+                                    <span class="slds-media__figure slds-listbox__option-icon"></span>
+                                    <span class="slds-truncate">
+                                        <span>{option.label}</span>
+                                    </span>
+                                </div>
+                            </li>
+                            <!--/ li to display each option in the list -->
+                        </template>
+                    </ul>
+                </div>
+            </template>
+            <template if:true={metaData}>
+                <div class="">
+                    <p>{activeSectionsMessage}</p>
+                </div>
+                <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleSectionToggle}>
+                    <template if:false={hasattributes}>
+                        <lightning-accordion-section name="attributes" label="attributes">
+                            <div class="slds-p-left_large">
+                                <template for:each={metattriaData} for:item="map">
+                                    <tr key={map.key}>
+                                        <th scope="col">
+                                            <div title={map.key}>
+                                                <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                                    alternative-text="breadcrumbs!" title="breadcrumbs">
+                                                </lightning-icon>
+                                                &nbsp;&nbsp; {map.key}&nbsp;&nbsp;
+                                            </div>
+                                        </th>
+                                        <th scope="col">
+                                            <div title={map.value}>: {map.value}</div>
+                                        </th>
+                                    </tr>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                    </template>
+                    <template if:false={hasChildRelationShips}>
+                        <lightning-accordion-section name="childRelationship" label={ChildValue}>
+                            <div class="slds-p-left_small">
+                                <template for:each={metaData.childRelationshipwrapper} for:item="items">
+                                    <template if:true={items.label}>
+                                        <li key={items.label}>
+                                            <lightning-accordion-section label={items.label} name={items.label}>
+                                                <div class="slds-p-left_large">
+                                                <template for:each={items.childattributes} for:item="atts">                             
+                                                    <p key={atts.attribute}>
+                                                        <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                                        alternative-text="breadcrumbs!" title="breadcrumbs">
+                                                    </lightning-icon> &nbsp;&nbsp; {atts.attribute} : {atts.value}</p>
+                                                </template>
+                                                </div>
+                                            </lightning-accordion-section>
+                                        </li>
+                                    </template>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                    </template>
+                    <lightning-accordion-section name="Fields" label={FieldValue}>
+                        <div class="slds-p-left_small">
+                            <template for:each={metaData.fieldWrapper} for:item="item">
+                                <li key={item.label}>
+                                    <lightning-accordion-section label={item.label} name={item.label}>
+                                        <div class="slds-p-left_large">
+                                        <template for:each={item.attributes} for:item="att">
+                                           
+                                            <p key={att.attribute}>
+                                                <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                                alternative-text="breadcrumbs!" title="breadcrumbs">
+                                            </lightning-icon>
+                                            &nbsp;&nbsp; {att.attribute} : {att.value}</p>
+                                        </template>
+                                        </div>
+                                    </lightning-accordion-section>
+                                    
+                                </li>
+                                
+                            </template>
+                        </div>
+                    </lightning-accordion-section>
+                    <template if:false={hasrecordTypes}>
+            
+                <lightning-accordion-section name="recordTypes" label={RecordValue}>
+                            <div class="slds-p-left_large">
+                                <template for:each={metarecData} for:item="recData">
+                                    <tr key={recData.key}>
+                                        <th scope="col">
+                                            <div title={recData.key}>
+                                                <lightning-icon icon-name="utility:breadcrumbs" size="xx-small"
+                                                    alternative-text="breadcrumbs!" title="breadcrumbs">
+                                                </lightning-icon>
+                                                &nbsp;&nbsp; {recData.key}
+                                            </div>
+                                        </th>
+                                        <th scope="col">
+                                            <div title={recData.value}>: {recData.value}</div>
+                                        </th>
+                                    </tr>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                    </template>
+
+                </lightning-accordion>
+
+            </template>
+        </div>
+
+
+
+
+    </lightning-card>
+
+</template>

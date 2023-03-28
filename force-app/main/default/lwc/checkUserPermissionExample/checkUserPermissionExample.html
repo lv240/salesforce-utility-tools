@@ -1,0 +1,9 @@
+<template>
+    <template if:true={isSetupEnabled}>
+        <h3>User Has Access</h3>
+    </template>
+
+    <template if:false={isSetupEnabled}>
+        <h3>User Does Not Have Access</h3>
+    </template>
+</template>
