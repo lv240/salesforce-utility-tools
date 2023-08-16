@@ -5,6 +5,7 @@ public class account_salesrep {
             acc.Query_Editor__Sales_Rep__c = acc.OwnerId;
         } 
         }else{
+            //for error exception
       throw new System.LimitException('You can only create up to 5 records at a time.');
         }
        
